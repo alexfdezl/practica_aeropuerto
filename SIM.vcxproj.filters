@@ -42,6 +42,9 @@
     <ClCompile Include="CRestauracio6Object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CPassaport6Object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="./destructorObject.h">
@@ -75,6 +78,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CRestauracio6Object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CPassaport6Object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
