@@ -106,6 +106,7 @@
     <ClCompile Include="./simulationevent.cpp" />
     <ClCompile Include="./simulationObject.cpp" />
     <ClCompile Include="./simulator.cpp" />
+    <ClCompile Include="CRestauracio6Object.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="./destructorObject.h" />
@@ -118,6 +119,7 @@
     <ClInclude Include="./simulationobject.h" />
     <ClInclude Include="./simulator.h" />
     <ClInclude Include="./structs.h" />
+    <ClInclude Include="CRestauracio6Object.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="./runtime/routes.txt" />

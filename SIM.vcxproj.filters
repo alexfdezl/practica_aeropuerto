@@ -15,72 +15,72 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\downloads\vcode 2\vcode\destructorObject.cpp">
+    <ClCompile Include="./destructorObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\downloads\vcode 2\vcode\eventlist.cpp">
+    <ClCompile Include="./eventlist.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\downloads\vcode 2\vcode\main.cpp">
+    <ClCompile Include="./main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\downloads\vcode 2\vcode\montyobject.cpp">
+    <ClCompile Include="./montyobject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\downloads\vcode 2\vcode\passenger.cpp">
+    <ClCompile Include="./passenger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\downloads\vcode 2\vcode\simulationevent.cpp">
+    <ClCompile Include="./simulationevent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\downloads\vcode 2\vcode\simulationObject.cpp">
+    <ClCompile Include="./simulationObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\downloads\vcode 2\vcode\simulator.cpp">
+    <ClCompile Include="./simulator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CRestauracio6Object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\downloads\vcode 2\vcode\destructorObject.h">
+    <ClInclude Include="./destructorObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\downloads\vcode 2\vcode\entity.h">
+    <ClInclude Include="./entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\downloads\vcode 2\vcode\eventlist.h">
+    <ClInclude Include="./eventlist.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\downloads\vcode 2\vcode\functions.h">
+    <ClInclude Include="./functions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\downloads\vcode 2\vcode\montyobject.h">
+    <ClInclude Include="./montyobject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\downloads\vcode 2\vcode\passenger.h">
+    <ClInclude Include="./passenger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\downloads\vcode 2\vcode\simulationevent.h">
+    <ClInclude Include="./simulationevent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\downloads\vcode 2\vcode\simulationobject.h">
+    <ClInclude Include="./simulationobject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\downloads\vcode 2\vcode\simulator.h">
+    <ClInclude Include="./simulator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\downloads\vcode 2\vcode\structs.h">
+    <ClInclude Include="./structs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CRestauracio6Object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\Downloads\VCode 2\VCode\runtime\routes.txt">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="..\Downloads\VCode 2\VCode\runtime\setup.txt">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="..\Downloads\VCode 2\VCode\runtime\trace.txt">
-      <Filter>Source Files</Filter>
-    </Text>
+    <Text Include="./runtime/routes.txt" />
+    <Text Include="./runtime/setup.txt" />
+    <Text Include="./runtime/trace.txt" />
   </ItemGroup>
 </Project>
