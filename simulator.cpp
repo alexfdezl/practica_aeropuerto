@@ -2,6 +2,7 @@
 #include "simulationevent.h"
 #include "eventlist.h"
 #include "montyobject.h"
+#include "CRestauracio6Object.h"
 #include "destructorObject.h"
 #include "functions.h"
 #include "passenger.h"
@@ -141,7 +142,7 @@ CSimulationObject* CSimulator::instantiate(std::string configuracio)
         return new CMontyObject(this,categoria,newID(),opcions[2]);
         break;
         case 14:
-        return new CMontyObject(this,categoria,newID(),opcions[2]);
+        return new CRestauracio6Object(this,categoria,newID(),opcions[2]);
         break;
         case 15:
         return new CMontyObject(this,categoria,newID(),opcions[2]);
