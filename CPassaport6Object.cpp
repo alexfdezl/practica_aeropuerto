@@ -44,7 +44,7 @@ void CPassaport6Object::showStatistics() {
     cout << getName() << " No tinc estadístics \n";
 };
 
-bool CPassaport6Object::AcceptEntity(CSimulationObject* emissor) {
+bool CPassaport6Object::AcceptEntity(CSimulationObject* emissor) {          //no sabemos si tiene capacitat maxima
     CPassenger* pax = (CPassenger*)emissor->getCurrentEntity();
     if (pax->isPMR()) {          //PMR
         if (cola_in_PMR.size() < capacitat || PMRprocess == false) return true;

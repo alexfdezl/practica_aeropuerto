@@ -1,14 +1,19 @@
 #pragma once
 #include "simulationobject.h"
 #include "simulator.h"
-#include <map>
+#include <queue>
 #include <list>
+#include <random>
+#include <iostream>
+#include <iomanip>
+#include <array>
+#include <map>
 
 using namespace std;
 
 class CRestauracio6Object :public CSimulationObject {
 public:
-    CRestauracio6Object(CSimulator* simulator, int category, int id, std::string nom);
+    CRestauracio6Object(CSimulator* simulator, int category, int id, std::string nom, int capacitatMAX);
     ~CRestauracio6Object() {}
     //Métode que el simulador us invocarà per a recollir els estadístics (print per consola)
     void showStatistics();
@@ -25,4 +30,18 @@ public:
     void simulationStart();
     //Métode que el simulador us pot invocar a la finalització de l'estudi
     void simulationEnd();
+
+private:
+    queue<CSimulationEvent* > cola_in;
+    queue<CSimulationEvent* > cola_out;
+    void CRestauracio6Object::temps_estada();
+    float CRestauracio6Object::delay();
+    bool CRestauracio6Object::taula_disponible();
+    int nClients;
+    int capacitat;
+    void CRestauracio6Object::ocupa_taula();
+    void CRestauracio6Object::desocupa_taula();
+    std::mt19937 g;
+    std::piecewise_linear_distribution<double> dist;
+    std::piecewise_linear_distribution<double> triangular_distribution(double min, double peak, double max);
 };
