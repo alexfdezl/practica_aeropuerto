@@ -150,7 +150,7 @@ CSimulationObject* CSimulator::instantiate(std::string configuracio)
         return new CRestauracio6Object(this, categoria, newID(), opcions[2]);
         break;
     case 15:
-        return new CPassaport6Object(this, categoria, newID(), opcions[2]);
+        return new CPassaport6Object(this, categoria, newID(), opcions[2], 1);
         break;
     case 16:
         return new CMontyObject(this, categoria, newID(), opcions[2]);

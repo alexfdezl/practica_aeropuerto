@@ -13,7 +13,7 @@ using namespace std;
 
 class CPassaport6Object :public CSimulationObject {
 public:
-    CPassaport6Object(CSimulator* simulator, int category, int id, std::string nom);
+    CPassaport6Object(CSimulator* simulator, int category, int id, std::string nom, int capacitat);
     ~CPassaport6Object() {}
     //Métode que el simulador us invocarà per a recollir els estadístics (print per consola)
     void showStatistics();
