@@ -32,11 +32,6 @@ public:
     void simulationEnd();
 
 private:
-    std::list<CPassenger* > cuaPMR;
-    std::list<CPassenger* > cuaNoPMR;
-    std::list<CPassenger* > cua1;
-    std::list<CPassenger* > cua2;
-    std::list<CPassenger* > cua3;
     queue<CSimulationEvent* > cola_in;
     queue<CSimulationEvent* > cola_in_PMR;
     queue<CSimulationEvent* > cola_out;

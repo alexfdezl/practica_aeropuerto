@@ -4,7 +4,7 @@
 
 class CEntity;
 
-enum enumEventType { ePUSH=0,eSERVICE=1};
+enum enumEventType { ePUSH=0,eSERVICE=1,eFREEEVENT=2};
         
 class CSimulationEvent{
     public:
