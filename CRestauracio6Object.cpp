@@ -18,6 +18,16 @@ void CRestauracio6Object::showStatistics() {
     cout << getName() << " No tinc estadístics \n";
 };
 
+bool CRestauracio6Object::AcceptEntity(CSimulationObject* emissor)
+{
+    return true;
+}
+//És una funció virtial pura així que us tocarà implementar-la indiferentment de si la invoqueu o no.
+bool CRestauracio6Object::SendMeNow(CSimulationObject* tincEspai)
+{
+    return false;
+};
+
 //Processar un esdeveniment de simulació, funció pura que us toca implementar
 void CRestauracio6Object::processEvent(CSimulationEvent* event) {
     if (event->getEntity() == NULL)
