@@ -165,7 +165,7 @@ void CRestauracio6Object::processEvent(CSimulationEvent* event) {
                 }
                 else {                  //hi ha taula
                     ocupa_taula();
-                    tempsEvent = delay();
+                    tempsEvent = delay() + event->getTime();
                     CSimulationEvent* eventPush = new CSimulationEvent(tempsEvent, this, this, event->getEntity(), eSERVICE);
                     m_Simulator->scheduleEvent(eventPush);
                     std::cout << " i programo un event service per a l'entitat " + to_string(event->getEntity()->getId()) + "\n";
@@ -316,10 +316,11 @@ void CRestauracio6Object::processEvent(CSimulationEvent* event) {
 }
 
 void CRestauracio6Object::gestioSendMeNow() {
-    if (!listaPendents.empty()) {
-        CSimulationObject* primer = listaPendents.front();
-        bool b = primer->SendMeNow(this);
-        listaPendents.pop_front();
+    bool b = false;
+    while (!pendingAcceptList.empty() && !b) {
+        CSimulationObject* primer = pendingAcceptList.front();
+        b = primer->SendMeNow(this);
+        pendingAcceptList.pop_front();
     }
 }
 

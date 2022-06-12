@@ -44,20 +44,37 @@ void CPassaport6Object::showStatistics() {
     cout << getName() << " No tinc estadístics \n";
 };
 
-bool CPassaport6Object::AcceptEntity(CSimulationObject* emissor) {          //no sabemos si tiene capacitat maxima
-    CPassenger* pax = (CPassenger*)emissor->getCurrentEntity();
-    if (pax->isPMR()) {          //PMR
-        if (cola_in_PMR.size() < capacitat) return true;
+bool CPassaport6Object::AcceptEntity(CSimulationObject* emissor) {
+    if (cola_in.size() + cola_in_PMR.size() < capacitat) return true;
+    else {
+        pendingAcceptList.push_back(emissor);
         return false;
     }
-    else {                      //noPMR
-        if (cola_in.size() < capacitat) return true;
-        return false;
-    }
-    return false;
 }
 //És una funció virtial pura així que us tocarà implementar-la indiferentment de si la invoqueu o no.
 bool CPassaport6Object::SendMeNow(CSimulationObject* tincEspai) {
+    itMap = mapaRebutjats.find(tincEspai);
+    if (itMap != mapaRebutjats.end()) {
+        CEntity* entitat = itMap->second.front();
+        CPassenger* pax = (CPassenger*)entitat;
+        if (pax->HaslostFlight() && pax->takeFlight()) {
+            //pop, destruir i return false
+            std::list<CEntity*>::iterator itList = itMap->second.begin();
+            itMap->second.erase(itList);
+            m_Simulator->deleteEntity(entitat);
+            return false;
+        }
+        else {
+            //pop, push i return true
+            std::list<CEntity*>::iterator itList = itMap->second.begin();
+            itMap->second.erase(itList);
+            int temps = m_Simulator->time() + m_Simulator->timeTo(tincEspai, pax);
+            CSimulationEvent* eventPush = new CSimulationEvent(temps, this, this, entitat, ePUSH);
+            m_Simulator->scheduleEvent(eventPush);
+            std::cout << " i programo un event service per a l'entitat " + to_string(entitat->getId()) + "\n";
+            return true;
+        }
+    }
     return false;
 };
 
@@ -76,8 +93,6 @@ float CPassaport6Object::delay() {
     return tempsEvent;
 }
 
-
-
 //Processar un esdeveniment de simulació, funció pura que us toca implementar
 void CPassaport6Object::processEvent(CSimulationEvent* event) {
     if (event->getEntity() == NULL)
@@ -87,29 +102,26 @@ void CPassaport6Object::processEvent(CSimulationEvent* event) {
 
     float tempsEvent = 0;
     CPassenger* pax = (CPassenger*)event->getEntity();
-    //CPassenger* pass = (CPassenger*)this->getCurrentEntity();
     if (event->getEventType() == ePUSH) {
         if (getState() == IDLE) {
-            tempsEvent = delay();
-            CSimulationEvent* eventPush = new CSimulationEvent(tempsEvent, this, this, event->getEntity(), eSERVICE);
-            m_Simulator->scheduleEvent(eventPush);
             if (pax->isPMR()) {            //PMR
                 PMRprocess = true;
             }
             else noPMRprocess = true;
+            tempsEvent = delay() + event->getTime();
+            CSimulationEvent* eventPush = new CSimulationEvent(tempsEvent, this, this, event->getEntity(), eSERVICE);
+            m_Simulator->scheduleEvent(eventPush);
             std::cout << " i programo un event service per a l'entitat " + to_string(event->getEntity()->getId()) + "\n";
             setState(SERVICE);
         }
         if (getState() == SERVICE) {
             if (pax->isPMR()) {            //PMR
                 if (PMRprocess) {
-                    //cola_in_PMR.push(event->getProvider()); //NO DEBERIAMOS ALMACENAR LA ENTIDAD??
-                    //cola_in_PMR.push(this->getCurrentEntity());
                     cola_in_PMR.push(event);
                 }
                 else {
                     PMRprocess = true;
-                    tempsEvent = delay();
+                    tempsEvent = delay() + event->getTime();
                     CSimulationEvent* eventPush = new CSimulationEvent(tempsEvent, this, this, event->getEntity(), eSERVICE);
                     m_Simulator->scheduleEvent(eventPush);
                     std::cout << " i programo un event service per a l'entitat " + to_string(event->getEntity()->getId()) + "\n";
@@ -117,28 +129,25 @@ void CPassaport6Object::processEvent(CSimulationEvent* event) {
             }
             else {                      //noPMR
                 if (noPMRprocess) {
-                    //cola_in.push(event->getProvider()); //NO DEBERIAMOS ALMACENAR LA ENTIDAD??
                     cola_in.push(event);
                 }
                 else {
                     noPMRprocess = true;
-                    tempsEvent = delay();
+                    tempsEvent = delay() + event->getTime();
                     CSimulationEvent* eventPush = new CSimulationEvent(tempsEvent, this, this, event->getEntity(), eSERVICE);
                     m_Simulator->scheduleEvent(eventPush);
                     std::cout << " i programo un event service per a l'entitat " + to_string(event->getEntity()->getId()) + "\n";
                 }
             }
-
         }
     }
     if (event->getEventType() == eSERVICE) {
         if (m_category > 0)
         {
             if (pax->isPMR()) {         //PMR
-                //cua_sortida_PMR.push(event->getProvider()); //NO DEBERIAMOS ALMACENAR LA ENTIDAD??
                 cola_out_PMR.push(event);
                 if (cola_in_PMR.size() > 0) {
-                    tempsEvent = delay();
+                    tempsEvent = delay() + event->getTime();
                     CSimulationEvent* nextEvent = cola_in_PMR.front();
                     CSimulationEvent* eventPush = new CSimulationEvent(tempsEvent, this, this, nextEvent->getEntity(), eSERVICE);
                     cola_in_PMR.pop();                    
@@ -151,10 +160,9 @@ void CPassaport6Object::processEvent(CSimulationEvent* event) {
                 }
             }
             else {                      //noPMR
-                //cola_out.push(event->getProvider()); //NO DEBERIAMOS ALMACENAR LA ENTIDAD??
                 cola_out.push(event);
                 if (cola_in.size() > 0) {
-                    tempsEvent = delay();
+                    tempsEvent = delay() + event->getTime();
                     CSimulationEvent* nextEvent = cola_in.front();
                     CSimulationEvent* eventPush = new CSimulationEvent(tempsEvent, this, this, nextEvent->getEntity(), eSERVICE);
                     cola_in.pop();
@@ -166,30 +174,109 @@ void CPassaport6Object::processEvent(CSimulationEvent* event) {
                     if (!PMRprocess) setState(IDLE);
                 }
             }
-
+            //buscar desti
             std::list<struct__route> destins;
             destins = m_Simulator->nextObject(event->getEntity(), this);
-            for (int i = 0; i < destins.size(); i++) {                                      
-                int hora_vuelo = event->getEntity()->m_departureTime;
-                if ((m_Simulator->time() + destins.front().time) >= hora_vuelo) {
+            int mida = destins.size();
+            int temps;
+            CSimulationEvent* eventService;
+            if (pax->isSchengen()) {        //l'envio a la cinta
+                //categoria 11
+                for (int i = 0; i < mida; i++) {
+                    struct__route candidat = destins.front();
+                    if (candidat.destination->getCategory() == 11) {
+                        temps = candidat.time + m_Simulator->time();
+                        if (candidat.destination->AcceptEntity(this)) {     //accepten
+                            eventService = new CSimulationEvent(temps, this, candidat.destination, event->getEntity(), ePUSH);
+                            m_Simulator->scheduleEvent(eventService);
+                            std::cout << " i programo un event push per a l'entitat " + to_string(event->getEntity()->getId()) + "\n";
+                        }
+                        else {      //no accepten
+                            itMap = mapaRebutjats.find(candidat.destination);
+                            if (itMap != mapaRebutjats.end()) {     //lo tengo
+                                std::list<CEntity*> aux = itMap->second;
+                                aux.push_back(event->getEntity());
+                                mapaRebutjats.erase(itMap);
+                                mapaRebutjats.insert(make_pair(candidat.destination, aux));
+                            }
+                            else {          //no lo tengo
+                                std::list<CEntity*> aux;
+                                aux.push_back(event->getEntity());
+                                mapaRebutjats.insert(make_pair(candidat.destination, aux));
+                            }
+                        }
+                    }
                     destins.pop_front();
                 }
             }
-            struct__route candidat = destins.front();
-            CSimulationEvent* eventService;
-            if (candidat.destination == NULL) {
-                std::cout << " i no se trobar el  meu següent destí" + to_string(event->getEntity()->getId()) + "\n";
-                destins = m_Simulator->nextObject(event->getEntity(), this);                                                
-                setState(IDLE);
+            else {      //no l'envio a la cinta, no es Schengen
+                int idFinger = pax->getNumberFinger();
+                CSimulationObject* finger = m_Simulator->getFinger(idFinger);
+                float timeToFinger = m_Simulator->timeTo(finger, pax);
+                if (m_Simulator->time() < pax->m_departureTime - 45 - timeToFinger) {
+                    //categoria 13
+                    for (int i = 0; i < mida; i++) {            //l'envio a restauracio
+                        struct__route candidat = destins.front();
+                        if (candidat.destination->getCategory() == 13) {
+                            temps = candidat.time + m_Simulator->time();
+                            if (candidat.destination->AcceptEntity(this)) {     //accepten
+                                eventService = new CSimulationEvent(temps, this, candidat.destination, event->getEntity(), ePUSH);
+                                m_Simulator->scheduleEvent(eventService);
+                                std::cout << " i programo un event push per a l'entitat " + to_string(event->getEntity()->getId()) + "\n";
+                            }
+                            else {      //no accepten
+                                itMap = mapaRebutjats.find(candidat.destination);
+                                if (itMap != mapaRebutjats.end()) {     //lo tengo
+                                    std::list<CEntity*> aux = itMap->second;
+                                    aux.push_back(event->getEntity());
+                                    mapaRebutjats.erase(itMap);
+                                    mapaRebutjats.insert(make_pair(candidat.destination, aux));
+                                }
+                                else {          //no lo tengo
+                                    std::list<CEntity*> aux;
+                                    aux.push_back(event->getEntity());
+                                    mapaRebutjats.insert(make_pair(candidat.destination, aux));
+                                }
+                            }
+                        }
+                        destins.pop_front();
+                    }
+                }
+                else {          //l'envio al finger
+                    //categoria 15
+                    if (finger->AcceptEntity(this)) {       //accepten l'entitat
+                        float temps = m_Simulator->timeTo(finger, pax) + event->getTime();
+                        CSimulationEvent* eventService = new CSimulationEvent(temps, this, finger, event->getEntity(), ePUSH);
+                        m_Simulator->scheduleEvent(eventService);
+                        std::cout << " i programo un event push per a l'entitat " + to_string(event->getEntity()->getId()) + "\n";
+                    }
+                    else {      //no accepten l'entitat
+                        itMap = mapaRebutjats.find(finger);
+                        if (itMap != mapaRebutjats.end()) {     //lo tengo
+                            std::list<CEntity*> aux = itMap->second;
+                            aux.push_back(event->getEntity());
+                            mapaRebutjats.erase(itMap);
+                            mapaRebutjats.insert(make_pair(finger, aux));
+                        }
+                        else {          //no lo tengo
+                            std::list<CEntity*> aux;
+                            aux.push_back(event->getEntity());
+                            mapaRebutjats.insert(make_pair(finger, aux));
+                        }
+                    }
+                }
             }
-            else {
-                tempsEvent = candidat.time + m_Simulator->time();
-                eventService = new CSimulationEvent(tempsEvent, this, candidat.destination, event->getEntity(), ePUSH);
-                m_Simulator->scheduleEvent(eventService);
-                std::cout << " i programo un event push per a l'entitat " + to_string(event->getEntity()->getId()) + "\n";
-                setState(IDLE);
-            }
+            gestioSendMeNow();
         }
+    }
+}
+
+void CPassaport6Object::gestioSendMeNow() {
+    bool b = false;
+    while (!pendingAcceptList.empty() && !b) {
+        CSimulationObject* primer = pendingAcceptList.front();
+        b = primer->SendMeNow(this);
+        pendingAcceptList.pop_front();
     }
 }
 

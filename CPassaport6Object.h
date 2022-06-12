@@ -41,11 +41,13 @@ private:
     bool PMRprocess = false;
     void CPassaport6Object::temps_incidents();
     float CPassaport6Object::delay();
-
+    std::map<CSimulationObject*, list<CEntity*>> mapaRebutjats;
+    std::map<CSimulationObject*, list<CEntity*>>::iterator itMap;
     std::mt19937 g;
     std::piecewise_linear_distribution<double> dist1;
     std::piecewise_linear_distribution<double> dist2;
     std::piecewise_linear_distribution<double> dist3;
     std::piecewise_linear_distribution<double> triangular_distribution(double min, double peak, double max);
+    void CPassaport6Object::gestioSendMeNow();
 
 };
