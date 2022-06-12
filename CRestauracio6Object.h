@@ -49,4 +49,6 @@ private:
     std::map<CSimulationObject*, list<CEntity*>> mapaRebutjats;
     std::map<CSimulationObject*, list<CEntity*>>::iterator itMap;
     void CRestauracio6Object::gestioSendMeNow();
+    int passengersIn;
+    int passengersOut;
 };

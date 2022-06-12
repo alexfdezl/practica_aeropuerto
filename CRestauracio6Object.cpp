@@ -56,7 +56,8 @@ float CRestauracio6Object::delay() {
 
 //Métode que el simulador us invocarà per a recollir els estadístics (print per consola)
 void CRestauracio6Object::showStatistics() {
-    cout << getName() << " No tinc estadístics \n";
+    std::cout << " Han entrat " << passengersIn << " passengers i han sortit " << passengersOut << " passengers \n";
+    std::cout << " L'objecte te un percentatge d'ocupacio del " << float(((nClients+cola_in.size())/capacitat)*100) << "% \n";
 };
 
 bool CRestauracio6Object::AcceptEntity(CSimulationObject* emissor) {
@@ -104,6 +105,7 @@ void CRestauracio6Object::processEvent(CSimulationEvent* event) {
     float tempsEvent = 0;
     CPassenger* pax = (CPassenger*)event->getEntity();
     if (event->getEventType() == ePUSH) {
+        ++passengersIn;
         if (getState() == IDLE) {
             if (pax->takeFlight()) {        //agafa vol
                 float hora_vuelo = pax->m_departureTime;
@@ -121,6 +123,7 @@ void CRestauracio6Object::processEvent(CSimulationEvent* event) {
                     CSimulationEvent* eventGoToFinger = new CSimulationEvent(temps + m_Simulator->time(), this, finger, event->getEntity(), ePUSH);
                     m_Simulator->scheduleEvent(eventGoToFinger);
                     std::cout << " i programo un event push per a l'entitat " + to_string(event->getEntity()->getId()) + "\n";
+                    ++passengersOut;
                 }
             }
             else {              //no agafa vol
@@ -157,6 +160,7 @@ void CRestauracio6Object::processEvent(CSimulationEvent* event) {
                     CSimulationEvent* eventGoToFinger = new CSimulationEvent(temps+m_Simulator->time(), this, finger, event->getEntity(), ePUSH);
                     m_Simulator->scheduleEvent(eventGoToFinger);
                     std::cout << " i programo un event push per a l'entitat " + to_string(event->getEntity()->getId()) + "\n";
+                    ++passengersOut;
                 }
             }
             else {          //no vola
@@ -199,6 +203,7 @@ void CRestauracio6Object::processEvent(CSimulationEvent* event) {
                     CSimulationEvent* eventService = new CSimulationEvent(temps, this, finger, event->getEntity(), ePUSH);
                     m_Simulator->scheduleEvent(eventService);
                     std::cout << " i programo un event push per a l'entitat " + to_string(event->getEntity()->getId()) + "\n";
+                    ++passengersOut;
                 }
                 else {      //no accepten l'entitat
                     itMap = mapaRebutjats.find(finger);
@@ -231,6 +236,7 @@ void CRestauracio6Object::processEvent(CSimulationEvent* event) {
                                 eventService = new CSimulationEvent(temps, this, candidat.destination, event->getEntity(), ePUSH);
                                 m_Simulator->scheduleEvent(eventService);
                                 std::cout << " i programo un event push per a l'entitat " + to_string(event->getEntity()->getId()) + "\n";
+                                ++passengersOut;
                             }
                             else {          //no accepten
                                 itMap = mapaRebutjats.find(candidat.destination);
@@ -260,6 +266,7 @@ void CRestauracio6Object::processEvent(CSimulationEvent* event) {
                                 eventService = new CSimulationEvent(temps, this, candidat.destination, event->getEntity(), ePUSH);
                                 m_Simulator->scheduleEvent(eventService);
                                 std::cout << " i programo un event push per a l'entitat " + to_string(event->getEntity()->getId()) + "\n";
+                                ++passengersOut;
                             }
                             else {      //no accepten
                                 itMap = mapaRebutjats.find(candidat.destination);
@@ -294,6 +301,7 @@ void CRestauracio6Object::processEvent(CSimulationEvent* event) {
                     CSimulationEvent* eventFiCua = new CSimulationEvent(temps, this, finger, event->getEntity(), ePUSH);
                     m_Simulator->scheduleEvent(eventFiCua);
                     std::cout << " i programo un event push per a l'entitat " + to_string(event->getEntity()->getId()) + "\n";
+                    ++passengersOut;
                 }
                 else {      //no accepten
                     itMap = mapaRebutjats.find(finger);

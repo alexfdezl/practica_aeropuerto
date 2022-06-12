@@ -41,7 +41,8 @@ void CPassaport6Object::temps_incidents() {
 
 //Métode que el simulador us invocarà per a recollir els estadístics (print per consola)
 void CPassaport6Object::showStatistics() {
-    cout << getName() << " No tinc estadístics \n";
+    std::cout << " Han entrat " << passengersIn << " passengers i han sortit " << passengersOut << " passengers \n";
+    std::cout << " De tots els passengers que han passat, un " << float((contadorPMR/passengersIn)*100) << "% son PMR \n";
 };
 
 bool CPassaport6Object::AcceptEntity(CSimulationObject* emissor) {
@@ -103,9 +104,11 @@ void CPassaport6Object::processEvent(CSimulationEvent* event) {
     float tempsEvent = 0;
     CPassenger* pax = (CPassenger*)event->getEntity();
     if (event->getEventType() == ePUSH) {
+        ++passengersIn;
         if (getState() == IDLE) {
             if (pax->isPMR()) {            //PMR
                 PMRprocess = true;
+                ++contadorPMR;
             }
             else noPMRprocess = true;
             tempsEvent = delay() + event->getTime();
@@ -116,6 +119,7 @@ void CPassaport6Object::processEvent(CSimulationEvent* event) {
         }
         if (getState() == SERVICE) {
             if (pax->isPMR()) {            //PMR
+                ++contadorPMR;
                 if (PMRprocess) {
                     cola_in_PMR.push(event);
                 }

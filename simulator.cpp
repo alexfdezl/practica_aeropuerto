@@ -302,12 +302,12 @@ void CSimulator::run() {
     CPassenger* pax;
 
     // Crear paxs que volen agafar un vol
-     /*   for(int i=0;i<300;i++){
+        for(int i=0;i<300;i++){
             pax=createEntity(0.1f);
             float time=50;
             CSimulationEvent* ev=new CSimulationEvent(time,entrada,entrada,(CEntity*)pax,ePUSH);
             scheduleEvent(ev);
-        }*/
+        }
         //Crear paxs que volen tornar a BCN
     for (int i = 0; i < 300; i++) {
         pax = createEntity(0.1f + i * 15, "SNC219");
