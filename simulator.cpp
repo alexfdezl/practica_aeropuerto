@@ -147,10 +147,10 @@ CSimulationObject* CSimulator::instantiate(std::string configuracio)
         return new CMontyObject(this, categoria, newID(), opcions[2]);
         break;
     case 14:
-        return new CRestauracio6Object(this, categoria, newID(), opcions[2], 350);
+        return new CMontyObject(this, categoria, newID(), opcions[2]);
         break;
     case 15:
-        return new CPassaport6Object(this, categoria, newID(), opcions[2], 1);
+        return new CMontyObject(this, categoria, newID(), opcions[2]);
         break;
     case 16:
         return new CMontyObject(this, categoria, newID(), opcions[2]);
@@ -209,7 +209,7 @@ CSimulationObject* CSimulator::instantiate(std::string configuracio)
         return new CMontyObject(this, categoria, newID(), opcions[2]);
         break;
     case 34:
-        return new CMontyObject(this, categoria, newID(), opcions[2]);
+        return new CPassaport6Object(this, categoria, newID(), opcions[2], 70);
         break;
     case 35:
         return new CMontyObject(this, categoria, newID(), opcions[2]);
@@ -227,7 +227,7 @@ CSimulationObject* CSimulator::instantiate(std::string configuracio)
         return new CMontyObject(this, categoria, newID(), opcions[2]);
         break;
     case 40:
-        return new CMontyObject(this, categoria, newID(), opcions[2]);
+        return new CRestauracio6Object(this, categoria, newID(), opcions[2], 350);
         break;
     case 41:
         return new CMontyObject(this, categoria, newID(), opcions[2]);

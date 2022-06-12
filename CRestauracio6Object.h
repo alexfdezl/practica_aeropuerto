@@ -8,6 +8,7 @@
 #include <iomanip>
 #include <array>
 #include <map>
+#include <deque>
 
 using namespace std;
 
@@ -32,8 +33,8 @@ public:
     void simulationEnd();
 
 private:
-    queue<CSimulationEvent* > cola_in;
-    queue<CSimulationEvent* > cola_out;
+    deque<CSimulationEvent* > cola_in;
+    deque<CSimulationEvent* > cola_out;
     void CRestauracio6Object::temps_estada();
     float CRestauracio6Object::delay();
     bool CRestauracio6Object::taula_disponible();
@@ -44,4 +45,8 @@ private:
     std::mt19937 g;
     std::piecewise_linear_distribution<double> dist;
     std::piecewise_linear_distribution<double> triangular_distribution(double min, double peak, double max);
+    std::list<CSimulationObject*> listaPendents;
+    std::map<CSimulationObject*, list<CEntity*>> mapaRebutjats;
+    std::map<CSimulationObject*, list<CEntity*>>::iterator itMap;
+    void CRestauracio6Object::gestioSendMeNow();
 };

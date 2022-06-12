@@ -47,11 +47,11 @@ void CPassaport6Object::showStatistics() {
 bool CPassaport6Object::AcceptEntity(CSimulationObject* emissor) {          //no sabemos si tiene capacitat maxima
     CPassenger* pax = (CPassenger*)emissor->getCurrentEntity();
     if (pax->isPMR()) {          //PMR
-        if (cola_in_PMR.size() < capacitat || PMRprocess == false) return true;
+        if (cola_in_PMR.size() < capacitat) return true;
         return false;
     }
     else {                      //noPMR
-        if (cola_in.size() < capacitat || noPMRprocess == false) return true;
+        if (cola_in.size() < capacitat) return true;
         return false;
     }
     return false;
@@ -191,8 +191,6 @@ void CPassaport6Object::processEvent(CSimulationEvent* event) {
             }
         }
     }
-    //if (event->getEventType() == eFREEEVENT) {}
-
 }
 
 //Métode que el simulador invocarà a l'inici de la simulació, abans de que hi hagi cap esdeveniment a la llista d'esdeveniments

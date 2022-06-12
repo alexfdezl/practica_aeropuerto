@@ -42,10 +42,10 @@ public:
     CPassenger* createEntity(float temps, std::string vol);
     //Crear una entitat que ve amb vol
     CPassenger* createEntity(float temps);
-protected:
-    friend class CDestructorObject;
     //Eliminar una entitat
     void deleteEntity(CEntity* entitat);
+protected:
+    friend class CDestructorObject;
     //Importa un model des d'un arxiu de text
     void importModel();
     //Crear el mapa de rutes
