@@ -62,7 +62,9 @@ void CRestauracio6Object::showStatistics() {
 
 bool CRestauracio6Object::AcceptEntity(CSimulationObject* emissor) {
     int quantitat = nClients + cola_in.size();
-    if (quantitat < capacitat) return true;
+    if (quantitat < capacitat) {
+        return true;
+    }
     else {
         listaPendents.push_back(emissor);
         return false;
@@ -88,7 +90,8 @@ bool CRestauracio6Object::SendMeNow(CSimulationObject* tincEspai) {
             int temps = m_Simulator->time() + m_Simulator->timeTo(tincEspai, pax);
             CSimulationEvent* eventPush = new CSimulationEvent(temps, this, this, entitat, ePUSH);
             m_Simulator->scheduleEvent(eventPush);
-            std::cout << " i programo un event service per a l'entitat " + to_string(entitat->getId()) + "\n";
+            //std::cout << " i programo un event service per a l'entitat " + to_string(entitat->getId()) + "\n";
+            std::cout << " i programo un event push per a l'entitat " + to_string(entitat->getId()) + "\n";
             return true;
         }
     }
@@ -146,7 +149,7 @@ void CRestauracio6Object::processEvent(CSimulationEvent* event) {
                         cola_in.push_back(event);
                         CSimulationEvent* eventFiCua = new CSimulationEvent(hora_vuelo-45, this, this, event->getEntity(), eFICUA);
                         m_Simulator->scheduleEvent(eventFiCua);
-                        std::cout << " i programo un event service per a l'entitat " + to_string(event->getEntity()->getId()) + "\n";
+                        std::cout << " i programo un event ficua per a l'entitat " + to_string(event->getEntity()->getId()) + "\n";
                     }
                     else {                  //hi ha taula
                         ocupa_taula();
@@ -337,6 +340,7 @@ void CRestauracio6Object::simulationStart() {
     setState(IDLE);
     temps_estada();
     cout << getName() << " inicialitzat \n";
+    //showStatistics();
 }
 //Métode que el simulador us pot invocar a la finalització de l'estudi
 void CRestauracio6Object::simulationEnd() {

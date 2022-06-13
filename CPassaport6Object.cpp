@@ -42,13 +42,19 @@ void CPassaport6Object::temps_incidents() {
 //Métode que el simulador us invocarà per a recollir els estadístics (print per consola)
 void CPassaport6Object::showStatistics() {
     std::cout << " Han entrat " << passengersIn << " passengers i han sortit " << passengersOut << " passengers \n";
-    std::cout << " De tots els passengers que han passat, un " << float((contadorPMR/passengersIn)*100) << "% son PMR \n";
+    if (passengersIn > 0) {
+        std::cout << " De tots els passengers que han passat, un " << float((contadorPMR / passengersIn) * 100) << "% son PMR \n";
+    }
 };
 
 bool CPassaport6Object::AcceptEntity(CSimulationObject* emissor) {
-    if (cola_in.size() + cola_in_PMR.size() < capacitat) return true;
+    if (cola_in.size() + cola_in_PMR.size() < capacitat) {
+        std::cout << "soc passaport i accepto \n";
+        return true;
+    }
     else {
         pendingAcceptList.push_back(emissor);
+        std::cout << "soc passaport i no accepto \n";
         return false;
     }
 }
@@ -289,6 +295,7 @@ void CPassaport6Object::simulationStart() {
     setState(IDLE);
     temps_incidents();
     cout << getName() << " inicialitzat \n";
+    //showStatistics();
 }
 //Métode que el simulador us pot invocar a la finalització de l'estudi
 void CPassaport6Object::simulationEnd() {

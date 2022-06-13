@@ -49,7 +49,7 @@ private:
     std::piecewise_linear_distribution<double> dist3;
     std::piecewise_linear_distribution<double> triangular_distribution(double min, double peak, double max);
     void CPassaport6Object::gestioSendMeNow();
-    int passengersIn;
-    int passengersOut;
-    int contadorPMR;
+    int passengersIn = 0;
+    int passengersOut = 0;
+    int contadorPMR = 0;
 };

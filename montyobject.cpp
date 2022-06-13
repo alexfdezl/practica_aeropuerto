@@ -41,7 +41,29 @@ void CMontyObject::processEvent(CSimulationEvent* event) {
     if (event->getEventType() == eSERVICE) {
         if (m_category > 0)
         {
+            //
             std::list<struct__route> destins;
+            destins = m_Simulator->nextObject(event->getEntity(), this);
+            int atzar = rand() % destins.size();
+            for (int i = 0; i < atzar; i++) {
+                destins.pop_front();
+            }
+            struct__route candidat = destins.front();
+            CSimulationEvent* eventService;
+            if (candidat.destination == NULL) {
+                std::cout << " i no se trobar el  meu següent destí" + to_string(event->getEntity()->getId()) + "\n";
+                destins = m_Simulator->nextObject(event->getEntity(), this);
+                setState(IDLE);
+            }
+            else {
+                tempsEvent = candidat.time + m_Simulator->time();
+                eventService = new CSimulationEvent(tempsEvent, this, candidat.destination, event->getEntity(), ePUSH);
+                m_Simulator->scheduleEvent(eventService);
+                std::cout << " i programo un event push per a l'entitat " + to_string(event->getEntity()->getId()) + "\n";
+                setState(IDLE);
+            }
+            //
+            /*std::list<struct__route> destins;
             destins = m_Simulator->nextObject(event->getEntity(), this);
             struct__route candidat = destins.front();
             CSimulationEvent* eventService;
@@ -61,7 +83,7 @@ void CMontyObject::processEvent(CSimulationEvent* event) {
                 else {
                     sendMeNowMap[candidat.destination].push_back(event->getEntity());
                 }
-            }
+            }*/
         }
     }
 }

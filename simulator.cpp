@@ -367,7 +367,8 @@ void CSimulator::broadcast(int missatge) {
 }
 bool CSimulator::simulationFinished() {
     //Executo 1200 unitats de temps com a mínim (no en feu cas d'això, que el temps es fixarà més endavant)
-    return m_currentTime > 1200 || m_eventList->isEmpty();
+    //return m_currentTime > 1200 || m_eventList->isEmpty();
+    return m_eventList->isEmpty();
 }
 
 void CSimulator::losesFlight(CPassenger* pax, enumLostFlight rao) {
